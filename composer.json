@@ -1,5 +1,5 @@
 {
-    "name": "lontar/blog",
+    "name": "thesimonharms/lontar",
     "description": "A minimal headless blog API package for Laravel with Markdown support.",
     "type": "library",
     "license": "MIT",
