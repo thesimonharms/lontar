@@ -72,7 +72,7 @@ abstract class TestCase extends OrchestraTestCase
     {
         return User::forceCreate([
             'name'     => 'Test User',
-            'email'    => 'test@example.com',
+            'email'    => 'test_' . uniqid() . '@example.com',
             'password' => bcrypt('password'),
         ]);
     }

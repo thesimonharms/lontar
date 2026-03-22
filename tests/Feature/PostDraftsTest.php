@@ -28,6 +28,17 @@ class PostDraftsTest extends TestCase
         $this->assertNotContains('a-published', $slugs);
     }
 
+    public function test_drafts_route_takes_priority_over_slug(): void
+    {
+        // A published post whose slug is literally "drafts"
+        $this->createPost(['slug' => 'drafts', 'published_at' => now()->subHour()]);
+
+        // Unauthenticated request should get 401, not the post
+        $response = $this->getJson('/api/posts/drafts');
+
+        $response->assertStatus(401);
+    }
+
     public function test_excludes_published_posts(): void
     {
         $user = $this->createUser();

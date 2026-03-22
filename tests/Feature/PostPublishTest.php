@@ -51,6 +51,24 @@ class PostPublishTest extends TestCase
         $this->assertDatabaseHas('posts', ['slug' => 'to-unpublish', 'published_at' => null]);
     }
 
+    public function test_publishing_already_published_post_updates_timestamp(): void
+    {
+        $user = $this->createUser();
+        $original = now()->subDay();
+        $this->createPost(['slug' => 're-publish', 'published_at' => $original]);
+
+        $this->travel(1)->hours();
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->postJson('/api/posts/re-publish/publish');
+
+        $response->assertStatus(200);
+        $this->assertNotEquals(
+            $original->toISOString(),
+            $response->json('published_at')
+        );
+    }
+
     public function test_publish_returns_404_for_nonexistent_slug(): void
     {
         $user = $this->createUser();

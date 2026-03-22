@@ -59,10 +59,9 @@ class PostIndexTest extends TestCase
     public function test_pagination_works_for_large_result_sets(): void
     {
         for ($i = 1; $i <= 20; $i++) {
-            Post::create([
+            $this->createPost([
                 'title'        => 'Post ' . $i,
                 'slug'         => 'post-' . $i,
-                'body'         => 'Body',
                 'published_at' => now()->subMinutes($i),
             ]);
         }

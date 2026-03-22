@@ -96,6 +96,20 @@ class PostStoreTest extends TestCase
                  ->assertJsonValidationErrors(['body']);
     }
 
+    public function test_validates_title_max_length(): void
+    {
+        $user = $this->createUser();
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->postJson('/api/posts', [
+                'title' => str_repeat('a', 256),
+                'body'  => 'Body.',
+            ]);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['title']);
+    }
+
     public function test_creates_as_draft_when_no_published_at(): void
     {
         $user = $this->createUser();
