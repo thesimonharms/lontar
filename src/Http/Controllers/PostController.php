@@ -34,7 +34,13 @@ class PostController extends Controller
             'published_at' => 'nullable|date',
         ]);
 
-        $data['slug'] = Str::slug($data['title']);
+        $base = Str::slug($data['title']);
+        $slug = $base;
+        $i = 1;
+        while (Post::where('slug', $slug)->exists()) {
+            $slug = $base . '-' . $i++;
+        }
+        $data['slug'] = $slug;
 
         $post = Post::create($data);
 
@@ -53,10 +59,17 @@ class PostController extends Controller
         ]);
 
         if (isset($data['title'])) {
-            $data['slug'] = Str::slug($data['title']);
+            $base = Str::slug($data['title']);
+            $slug = $base;
+            $i = 1;
+            while (Post::where('slug', $slug)->where('id', '!=', $post->id)->exists()) {
+                $slug = $base . '-' . $i++;
+            }
+            $data['slug'] = $slug;
         }
 
         $post->update($data);
+        $post->refresh();
 
         return response()->json($post);
     }
