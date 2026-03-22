@@ -65,6 +65,18 @@ class PostUpdateTest extends TestCase
         $this->assertEquals('existing-1', $response->json('slug'));
     }
 
+    public function test_updating_title_to_same_value_does_not_change_slug(): void
+    {
+        $user = $this->createUser();
+        $this->createPost(['slug' => 'same-title', 'title' => 'Same Title']);
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->putJson('/api/posts/same-title', ['title' => 'Same Title']);
+
+        $response->assertStatus(200);
+        $this->assertEquals('same-title', $response->json('slug'));
+    }
+
     public function test_partial_update_leaves_other_fields_intact(): void
     {
         $user = $this->createUser();

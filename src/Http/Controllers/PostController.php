@@ -22,7 +22,7 @@ class PostController extends Controller
     {
         $post = Post::published()->where('slug', $slug)->firstOrFail();
 
-        return response()->json($post);
+        return response()->json($post->append('rendered_body'));
     }
 
     public function store(Request $request)

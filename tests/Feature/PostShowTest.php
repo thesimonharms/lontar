@@ -32,6 +32,33 @@ class PostShowTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function test_rendered_body_is_included_in_response(): void
+    {
+        $this->createPost([
+            'slug'         => 'with-markdown',
+            'body'         => '# Hello',
+            'published_at' => now()->subHour(),
+        ]);
+
+        $response = $this->getJson('/api/posts/with-markdown');
+
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('rendered_body', $response->json());
+        $this->assertStringContainsString('<h1>', $response->json('rendered_body'));
+    }
+
+    public function test_returns_404_for_future_dated_post(): void
+    {
+        $this->createPost([
+            'slug'         => 'not-yet',
+            'published_at' => now()->addDay(),
+        ]);
+
+        $response = $this->getJson('/api/posts/not-yet');
+
+        $response->assertStatus(404);
+    }
+
     public function test_body_is_included_in_response(): void
     {
         $this->createPost([
