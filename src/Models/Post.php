@@ -22,7 +22,7 @@ class Post extends Model
     protected function renderedBody(): Attribute
     {
         return Attribute::get(
-            fn () => (new CommonMarkConverter())->convert($this->body)->getContent()
+            fn () => $this->body !== null ? (new CommonMarkConverter())->convert($this->body)->getContent() : null
         );
     }
 
