@@ -10,8 +10,6 @@ class Post extends Model
 {
     protected $fillable = ['title', 'slug', 'body', 'excerpt', 'published_at'];
 
-    protected $appends = ['rendered_body'];
-
     protected function casts(): array
     {
         return [
