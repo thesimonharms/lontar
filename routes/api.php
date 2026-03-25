@@ -1,7 +1,12 @@
 <?php
 
+use Lontar\Blog\Http\Controllers\FeedController;
 use Lontar\Blog\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+
+// Feeds
+Route::get('/feed',      [FeedController::class, 'rss']);
+Route::get('/feed/atom', [FeedController::class, 'atom']);
 
 // Public: published posts only
 Route::get('/posts', [PostController::class, 'index']);
